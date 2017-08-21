@@ -1,4 +1,4 @@
-TARG = ctc-talk
+TARG = compiling-to-categories
 
 .PRECIOUS: %.tex %.pdf %.web
 
@@ -35,5 +35,5 @@ STASH=conal@conal.net:/home/conal/web/talks
 web: web-token
 
 web-token: $(TARG).pdf
-	scp $? $(STASH)/compiling-to-categories.pdf
+	scp $? $(STASH)
 	touch $@
