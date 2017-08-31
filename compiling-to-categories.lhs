@@ -379,6 +379,18 @@ instance BoolCat Graph where
 
 }
 
+%if False
+\framet{Computation graphs --- bitonic sort}{
+
+> bitonic :: Tree N3 Int -> Tree N3 Int
+
+\vspace{-4ex}
+
+\begin{center}\wpicture{4.5in}{bitonic-up-3}\end{center}
+
+}
+%endif
+
 \framet{Haskell to hardware}{
 
 Convert graphs to Verilog:
