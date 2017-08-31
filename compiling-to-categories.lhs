@@ -1,4 +1,4 @@
-%% -*- latex -*-
+%% -*- latex -*- 
 
 % Presentation
 %\documentclass[aspectratio=1610]{beamer} % Macbook Pro screen 16:10
@@ -44,8 +44,8 @@
 Can we create fewer new vocabularies as well?
 }
 
-\framet{Shallow embeddings}{
-\begin{itemize} \itemsep2ex
+\framet{Shallow embedding}{\rnc{\baselinestretch}{1.6}
+\begin{itemize} %\itemsep2ex
 \item
   ``Just a library'', but with a suitable host language.
 \item
@@ -54,7 +54,7 @@ Can we create fewer new vocabularies as well?
   Great fit, and easy to implement; but restricts optimization.
 \item
   Inherits host language \& compiler \emph{limitations}, e.g., no
-  \begin{itemize} \itemsep2ex
+  \begin{itemize} %\itemsep2ex
   \item differentiation or integration
   \item incremental evaluation
   \item optimization
@@ -64,7 +64,7 @@ Can we create fewer new vocabularies as well?
 \end{itemize}
 }
 
-\framet{Deep embeddings}{
+\framet{Deep embedding}{
 \begin{itemize}\itemsep2ex
 \item Syntactic representation.
 \item More room for analysis and optimization.
@@ -72,9 +72,11 @@ Can we create fewer new vocabularies as well?
 \item Requires some vocabulary changes.
 \end{itemize}
 
+\vspace{2ex}
+
 Violates a design principle:
 \begin{center} \it
-languages serve expression; compilers serve implementation.
+Languages for expression; compilers for implementation.
 \end{center}
 }
 
@@ -711,8 +713,8 @@ Solution: |(-8,2)|.
 \end{itemize}
 }
 
-\definecolor{procolor}{rgb}{0,0.4,0}
-\definecolor{concolor}{rgb}{0.7,0,0}
+\definecolor{procolor}{rgb}{0,0.5,0}
+\definecolor{concolor}{rgb}{0.7,0.1,0.1}
 
 \nc\pro[1]{\item \textcolor{procolor}{#1}}
 \nc\con[1]{\item \textcolor{concolor}{#1}}
