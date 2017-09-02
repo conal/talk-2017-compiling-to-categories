@@ -379,7 +379,7 @@ instance BoolCat Graph where
 
 }
 
-%if False
+%if True
 \framet{Computation graphs --- bitonic sort}{
 
 > bitonic :: Tree N3 Int -> Tree N3 Int
