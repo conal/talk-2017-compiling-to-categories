@@ -81,3 +81,14 @@
 %format N14 = 14
 %format N15 = 15
 %format N16 = 16
+
+%format (RPow (h) (n)) = h"^{\downarrow"n"}"
+%format (LPow (h) (n)) = h"^{\uparrow"n"}"
+
+%format Pair = 2
+
+%format (Pow (h) (n)) = h"^{"n"}"
+
+%% %format Tree n = RPow Pair n
+
+%format Tree n = 2"^{\downarrow"n"}"
