@@ -2,8 +2,8 @@
 
 % Presentation
 %\documentclass[aspectratio=1610]{beamer} % Macbook Pro screen 16:10
-%% \documentclass{beamer} % default aspect ratio 4:3
-\documentclass[handout]{beamer}
+\documentclass{beamer} % default aspect ratio 4:3
+%% \documentclass[handout]{beamer}
 
 % \setbeameroption{show notes} % un-comment to see the notes
 
@@ -169,7 +169,7 @@ cosSinProd = (cosC &&& sinC) . mulC
 
 %format ProductCat = Cartesian
 %format CoproductCat = Cocartesian
-%format ClosedCat = Closed
+%format ClosedCat = CartesianClosed
 
 \out{
 \framet{Abstract algebra for functions}{
@@ -362,16 +362,22 @@ instance BoolCat Graph where
 
 \framet{Computation graphs --- fold}{
 
-> sum :: Tree N4 Int -> Int
+> sum @(Tree N4)
 
-\vspace{-4ex}
+%% > sum :: Tree N4 Int -> Int
+
+%% > sum :: RPow Pair N4 Int -> Int
+
+\vspace{-2ex}
 \begin{center}\wpicture{4.5in}{sum-t4}\end{center}
 
 }
 
 \framet{Computation graphs --- scan}{
 
-> lsums :: Tree N4 Int -> Tree N4 Int :* Int
+%% > lsums :: Tree N4 Int -> Tree N4 Int :* Int
+
+> lsums @(Tree N4)
 
 \vspace{-7ex}
 
@@ -382,7 +388,9 @@ instance BoolCat Graph where
 %if True
 \framet{Computation graphs --- bitonic sort}{
 
-> bitonic :: Tree N3 Int -> Tree N3 Int
+%% > bitonic :: Tree N3 Int -> Tree N3 Int
+
+> bitonic @(Tree N3)
 
 \vspace{-4ex}
 
@@ -574,7 +582,7 @@ instance NumCat D where
 \begin{code}
 data IF a b = IF (Iv a -> Iv b)
 \end{code}
-\pause
+%\pause
 \vspace{-4ex}
 \begin{code}
 type family Iv a
@@ -605,7 +613,7 @@ instance Cartesian IF where
 ...
 NOP
 \end{code}
-\pause
+%\pause
 \vspace{-4ex}
 \begin{code}
 instance (Iv a ~ (a :* a), Num a, Ord a) => NumCat IF a where
