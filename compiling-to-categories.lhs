@@ -27,65 +27,12 @@
 \frame{\titlepage}
 \institute{Target}
 
-\framet{Embedded domain-specific languages}{
-
-\emph{New vocabularies, not new languages}.
-
-\vspace{6ex}
-
-\begin{textblock}{180}[1,0](400,40)
-\wpicture{1.5in}{peter-landin}
-\end{textblock}
-
-\wpicture{4.5in}{next-700-title}
-
-\vspace{3ex}
-% \pause
-Can we create fewer new vocabularies as well?
-}
-
-\framet{Shallow embedding}{\rnc{\baselinestretch}{1.6}
-\begin{itemize} %\itemsep2ex
-\item
-  ``Just a library'', but with a suitable host language.
-\item
-  Use host language lambda \& application, booleans, numbers, etc.
-\item
-  Great fit, and easy to implement; but restricts optimization.
-\item
-  Inherits host language \& compiler \emph{limitations}, e.g., no
-  \begin{itemize} %\itemsep2ex
-  \item differentiation or integration
-  \item incremental evaluation
-  \item optimization
-  \item constraint solving
-  \item novel back-ends, e.g., GPU, circuits, JavaScript
-  \end{itemize}
-\end{itemize}
-}
-
-\framet{Deep embedding}{
-\begin{itemize}\itemsep2ex
-\item Syntactic representation.
-\item More room for analysis and optimization.
-\item Harder to implement; redundant with host compiler.
-\item Requires some vocabulary changes.
-\end{itemize}
-
-\vspace{2ex}
-
-Violates a design principle:
-\begin{center} \it
-Languages for expression; compilers for implementation.
-\end{center}
-}
-
 \framet{Overloading}{
 \begin{itemize} \itemsep3ex
 \item Alternative interpretation of common vocabulary.
 \item Laws for modular reasoning.
 \item Doesn't apply to lambda, variables, and application.
-\item Instead, \emph{eliminate} them.
+\pitem Instead, \emph{eliminate} them.
 \end{itemize}
 }
 
@@ -399,7 +346,7 @@ instance BoolCat Graph where
 }
 %endif
 
-\framet{Haskell to hardware}{
+\framet{Compiling to hardware}{
 
 Convert graphs to Verilog:
 
@@ -444,56 +391,6 @@ Convert graphs to Verilog:
 %% \nc\ad[1]{\mathop{\leadsto}_{#1}}
 %% %format DF s a b = a "\ad{"s"}" b
 %% %format DF' s = "\ad{"s"}"
-
-\framet{Example --- graphics}{\mathindent2ex
-\small
-\vspace{0.75ex}
-
-\begin{textblock}{150}[1,0](350,45)
-\begin{tcolorbox} \mathindent0ex
-\vspace{-1ex}
-\begin{code}
-type Region = R :* R -> Bool
-\end{code}
-\vspace{-3ex}
-\end{tcolorbox}
-\end{textblock}
-
-%format / = "/"
-\begin{code}
-disk :: R -> Region
-disk r p = magSqr p <= sqr r
-
-wobbly t = disk (3/4 + 1/4 * cos t)
-\end{code}
-
-\pause
-\vspace{-3.5ex}
-\begin{center}\wpicture{4.1in}{wobbly-disk-color}\end{center} 
-\pause
-\vspace{-4.5ex}
-%if False
-\begin{verbatim}
- bool wobbly (float in0, float in1, float in2)  // Generated GLSL
- { float v17 = 1.0;
-   float v23 = v17 / (0.75 + 0.25 * cos (in0));
-   float v24 = in1 * v23;
-   float v26 = in2 * v23;
-   return v24 * v24 + v26 * v26 <= v17;
- }
- vec4 effect (vec2 p) { return bw(wobbly(time,p.x,p.y)); }
-\end{verbatim}
-%else
-\begin{verbatim}
-uniform float in0;
-vec4 effect (float in1, float in2)
-{ float v5 = 0.75 + 0.25 * cos (in0);  // TODO: hoist
-  float v24 = in1 * in1 + in2 * in2 <= v5 * v5 ? 0.0 : 1.0;
-  return vec4 (v24, v24, v24, v24);
-}
-\end{verbatim}
-%endif
-}
 
 \framet{Automatic differentiation}{
 \mathindent-1ex
@@ -557,7 +454,7 @@ instance NumCat D where
 \wpicture{2in}{cosSinProd}
 \end{tcolorbox}
 \end{textblock}
-\pause
+%\pause
 
 \vspace{10ex}
 \begin{center}\wpicture{4.5in}{cosSinProd-ad}\end{center}
@@ -673,6 +570,57 @@ instance (Iv a ~ (a :* a), Num a, Ord a) => NumCat IF a where
 }
 %endif
 
+
+\framet{Example --- graphics}{\mathindent2ex
+\small
+\vspace{0.75ex}
+
+\begin{textblock}{150}[1,0](350,45)
+\begin{tcolorbox} \mathindent0ex
+\vspace{-1ex}
+\begin{code}
+type Region = R :* R -> Bool
+\end{code}
+\vspace{-3ex}
+\end{tcolorbox}
+\end{textblock}
+
+%format / = "/"
+\begin{code}
+disk :: R -> Region
+disk r p = magSqr p <= sqr r
+
+wobbly t = disk (3/4 + 1/4 * cos t)
+\end{code}
+
+\pause
+\vspace{-3.5ex}
+\begin{center}\wpicture{4.1in}{wobbly-disk-color}\end{center} 
+\pause
+\vspace{-4.5ex}
+%if False
+\begin{verbatim}
+ bool wobbly (float in0, float in1, float in2)  // Generated GLSL
+ { float v17 = 1.0;
+   float v23 = v17 / (0.75 + 0.25 * cos (in0));
+   float v24 = in1 * v23;
+   float v26 = in2 * v23;
+   return v24 * v24 + v26 * v26 <= v17;
+ }
+ vec4 effect (vec2 p) { return bw(wobbly(time,p.x,p.y)); }
+\end{verbatim}
+%else
+\begin{verbatim}
+uniform float in0;
+vec4 effect (float in1, float in2)
+{ float v5 = 0.75 + 0.25 * cos (in0);  // TODO: hoist
+  float v24 = in1 * in1 + in2 * in2 <= v5 * v5 ? 0.0 : 1.0;
+  return vec4 (v24, v24, v24, v24);
+}
+\end{verbatim}
+%endif
+}
+
 %if False
 \framet{Constraint solving (with John Wiegley)}{ \small
 
@@ -725,13 +673,70 @@ Solution: |(-8,2)|.
 
 \framet{Other examples}{
 \begin{itemize}\itemsep3ex
-\item Constraint solving via SMT
+\item Constraint solving via SMT (with John Wiegley)
 \item Linear maps
 \item Incremental evaluation
 \item Polynomials
 \item Nondeterministic and probabilistic programming
 \end{itemize}
 }
+
+%if True
+
+\framet{Shallow embedding}{\rnc{\baselinestretch}{1.6}
+\begin{itemize} %\itemsep2ex
+\item
+  ``Just a library'', but with a suitable host language.
+\item
+  Use host language lambda \& application, booleans, numbers, etc.
+\item
+  Great fit, and easy to implement; but restricts optimization.
+\item
+  Inherits host language \& compiler \emph{limitations}, e.g., no
+  \begin{itemize} %\itemsep2ex
+  \item differentiation or integration
+  \item incremental evaluation
+  \item optimization
+  \item constraint solving
+  \item novel back-ends, e.g., GPU, circuits, JavaScript
+  \end{itemize}
+\end{itemize}
+}
+
+\framet{Deep embedding}{
+\begin{itemize}\itemsep2ex
+\item Syntactic representation.
+\item More room for analysis and optimization.
+\item Harder to implement; redundant with host compiler.
+\item Requires some vocabulary changes.
+\end{itemize}
+
+\vspace{2ex}
+
+Violates a design principle:
+\begin{center} \it
+Languages for expression; compilers for implementation.
+\end{center}
+}
+
+\framet{Embedded domain-specific languages}{
+
+New vocabularies, not new languages.
+
+\vspace{6ex}
+
+\begin{textblock}{180}[1,0](400,40)
+\wpicture{1.5in}{peter-landin}
+\end{textblock}
+
+\wpicture{4.5in}{next-700-title}
+
+\vspace{3ex}
+% \pause
+\emph{We can create fewer new vocabularies as well.}
+}
+
+%else
 
 \definecolor{procolor}{rgb}{0,0.5,0}
 \definecolor{concolor}{rgb}{0.7,0.1,0.1}
@@ -767,5 +772,7 @@ Solution: |(-8,2)|.
   \end{itemize}
 \end{itemize}
 }
+
+%endif
 
 \end{document}
