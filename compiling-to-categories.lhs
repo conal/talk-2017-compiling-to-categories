@@ -28,7 +28,7 @@
 \institute{Target}
 
 \framet{Overloading}{
-\begin{itemize} \itemsep3ex
+\begin{itemize} \itemsep5ex
 \item Alternative interpretation of common vocabulary.
 \item Laws for modular reasoning.
 \item Doesn't apply to lambda, variables, and application.
@@ -238,7 +238,7 @@ class NumCat k a where
 }
 
 \framet{Changing interpretations}{
-\begin{itemize}\itemsep3ex
+\begin{itemize}\itemsep5ex
 \item
   We've eliminated lambdas and variables
 \item
@@ -672,7 +672,7 @@ Solution: |(-8,2)|.
 %endif
 
 \framet{Other examples}{
-\begin{itemize}\itemsep3ex
+\begin{itemize}\itemsep4ex
 \item Constraint solving via SMT (with John Wiegley)
 \item Linear maps
 \item Incremental evaluation
@@ -704,14 +704,15 @@ Solution: |(-8,2)|.
 }
 
 \framet{Deep embedding}{
-\begin{itemize}\itemsep2ex
+\begin{itemize}\itemsep3ex
 \item Syntactic representation.
 \item More room for analysis and optimization.
 \item Harder to implement; redundant with host compiler.
 \item Requires some vocabulary changes.
 \end{itemize}
 
-\vspace{2ex}
+\vspace{4ex}
+\pause
 
 Violates a design principle:
 \begin{center} \it
