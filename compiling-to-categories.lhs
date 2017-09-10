@@ -2,8 +2,8 @@
 
 % Presentation
 %\documentclass[aspectratio=1610]{beamer} % Macbook Pro screen 16:10
-\documentclass{beamer} % default aspect ratio 4:3
-%% \documentclass[handout]{beamer}
+%% \documentclass{beamer} % default aspect ratio 4:3
+\documentclass[handout]{beamer}
 
 % \setbeameroption{show notes} % un-comment to see the notes
 
@@ -276,8 +276,8 @@ class NumCat k a where
 
 > curry (addC . (exl &&& mulC . (const 3.0 &&& exr)))
 
-\pause
-\vspace{-2ex}
+%\pause
+\vspace{-4ex}
 \begin{center}\wpicture{4.6in}{xp3y-curried}\end{center}
 }
 
@@ -391,11 +391,60 @@ Convert graphs to Verilog:
 %% \nc\ad[1]{\mathop{\leadsto}_{#1}}
 %% %format DF s a b = a "\ad{"s"}" b
 %% %format DF' s = "\ad{"s"}"
+\framet{Example --- graphics}{\mathindent2ex
+\small
+\vspace{0.75ex}
 
-\framet{Automatic differentiation}{
+\begin{textblock}{150}[1,0](350,45)
+\begin{tcolorbox} \mathindent0ex
+\vspace{-1ex}
+\begin{code}
+type Region = R :* R -> Bool
+\end{code}
+\vspace{-3ex}
+\end{tcolorbox}
+\end{textblock}
+
+%format / = "/"
+\begin{code}
+disk :: R -> Region
+disk r p = magSqr p <= sqr r
+
+anim t = disk (3/4 + 1/4 * cos t)
+\end{code}
+
+\pause
+\vspace{-3.5ex}
+\begin{center}\wpicture{4.1in}{wobbly-disk-color}\end{center} 
+\pause
+\vspace{-4.5ex}
+%if False
+\begin{verbatim}
+ bool anim (float in0, float in1, float in2)  // Generated GLSL
+ { float v17 = 1.0;
+   float v23 = v17 / (0.75 + 0.25 * cos (in0));
+   float v24 = in1 * v23;
+   float v26 = in2 * v23;
+   return v24 * v24 + v26 * v26 <= v17;
+ }
+ vec4 effect (vec2 p) { return bw(anim(time,p.x,p.y)); }
+\end{verbatim}
+%else
+\begin{verbatim}
+uniform float in0;
+vec4 animA (float in1, float in2)
+{ float v5 = 0.75 + 0.25 * cos (in0);  // TODO: hoist
+  float v24 = in1 * in1 + in2 * in2 <= v5 * v5 ? 0.0 : 1.0;
+  return vec4 (v24, v24, v24, v24);
+}
+\end{verbatim}
+%endif
+}
+
+\framet{Differentiable functions}{
 \mathindent-1ex
 \begin{code}
-data D a b = D (a -> b :* (LM a b)) -- Derivatives are linear maps.
+newtype D a b = D (a -> (b :* (LM a b))) -- derivative as linear map
 \end{code}
 \pause
 \vspace{-4ex}
@@ -570,57 +619,6 @@ instance (Iv a ~ (a :* a), Num a, Ord a) => NumCat IF a where
 }
 %endif
 
-
-\framet{Example --- graphics}{\mathindent2ex
-\small
-\vspace{0.75ex}
-
-\begin{textblock}{150}[1,0](350,45)
-\begin{tcolorbox} \mathindent0ex
-\vspace{-1ex}
-\begin{code}
-type Region = R :* R -> Bool
-\end{code}
-\vspace{-3ex}
-\end{tcolorbox}
-\end{textblock}
-
-%format / = "/"
-\begin{code}
-disk :: R -> Region
-disk r p = magSqr p <= sqr r
-
-wobbly t = disk (3/4 + 1/4 * cos t)
-\end{code}
-
-\pause
-\vspace{-3.5ex}
-\begin{center}\wpicture{4.1in}{wobbly-disk-color}\end{center} 
-\pause
-\vspace{-4.5ex}
-%if False
-\begin{verbatim}
- bool wobbly (float in0, float in1, float in2)  // Generated GLSL
- { float v17 = 1.0;
-   float v23 = v17 / (0.75 + 0.25 * cos (in0));
-   float v24 = in1 * v23;
-   float v26 = in2 * v23;
-   return v24 * v24 + v26 * v26 <= v17;
- }
- vec4 effect (vec2 p) { return bw(wobbly(time,p.x,p.y)); }
-\end{verbatim}
-%else
-\begin{verbatim}
-uniform float in0;
-vec4 effect (float in1, float in2)
-{ float v5 = 0.75 + 0.25 * cos (in0);  // TODO: hoist
-  float v24 = in1 * in1 + in2 * in2 <= v5 * v5 ? 0.0 : 1.0;
-  return vec4 (v24, v24, v24, v24);
-}
-\end{verbatim}
-%endif
-}
-
 %if False
 \framet{Constraint solving (with John Wiegley)}{ \small
 
@@ -683,14 +681,15 @@ Solution: |(-8,2)|.
 
 %if True
 
-\framet{Shallow embedding}{\rnc{\baselinestretch}{1.6}
+\framet{Shallow embedding}{\rnc{\baselinestretch}{1.8}
+\vspace{-2ex}
 \begin{itemize} %\itemsep2ex
 \item
   ``Just a library'', but with a suitable host language.
+% \item Use host language lambda \& application, booleans, numbers, etc.
 \item
-  Use host language lambda \& application, booleans, numbers, etc.
-\item
-  Great fit, and easy to implement; but restricts optimization.
+  % Great fit, and
+  Easy to implement; but restricts optimization.
 \item
   Inherits host language \& compiler \emph{limitations}, e.g., no
   \begin{itemize} %\itemsep2ex
@@ -703,22 +702,26 @@ Solution: |(-8,2)|.
 \end{itemize}
 }
 
-\framet{Deep embedding}{
-\begin{itemize}\itemsep3ex
+\framet{Deep embedding}{\rnc{\baselinestretch}{1.8}
+\vspace{-2ex}
+\begin{itemize}
 \item Syntactic representation.
 \item More room for analysis and optimization.
 \item Harder to implement; redundant with host compiler.
 \item Requires some vocabulary changes.
 \end{itemize}
 
-\vspace{4ex}
-\pause
+%% \vspace{4ex}
+%\pause
 
-Violates a design principle:
-\begin{center} \it
-Languages for expression; compilers for implementation.
-\end{center}
+%% Violates a principle:
+%% \begin{center} \it
+%% Languages for expression; compilers for implementation.
+%% \end{center}
+
 }
+
+%if False
 
 \framet{Embedded domain-specific languages}{
 
@@ -736,6 +739,17 @@ New vocabularies, not new languages.
 % \pause
 \emph{We can create fewer new vocabularies as well.}
 }
+%else
+
+\framet{Compiling to categories}{
+\begin{itemize}\itemsep4ex
+ \item Just a library.
+ \item Easy to implement.
+ \item Analysis, optimization, non-standard target architectures.
+ \item Non-standard operations on functions.
+\end{itemize}
+}
+%endif
 
 %else
 
